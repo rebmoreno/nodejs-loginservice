@@ -3,7 +3,7 @@
 The Login Microservice allows the user/client to authenticate a user by sendin a POST request with a username and password. If all the informartion is correct then the service will respond with a JWT token that will be used to authenticate the request. Otherwise, if the information is wrong, then the service will return an error message.
 
 
-* Request and Receive Data 
+# Request and Receive Data 
 
 POST - /login: This used to authenticate a user and receive the JWT token.
      * Resquest Body:
@@ -44,7 +44,7 @@ axios.get("http://localhost:4001/protected", {
 .then(({ data }) => console.log("Data:", data))
 .catch(({ response }) => console.log("Error:", response?.data))
 
-* UML Sequence Diagram
+# UML Sequence Diagram
 
-![UML Diagram](./Users/rebeca/Downloads/IMG_E7CFA750EFE8-1.jpeg)
+![UML Diagram](IMG_E7CFA750EFE8-1.jpeg)
 
