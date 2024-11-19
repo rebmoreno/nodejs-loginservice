@@ -46,5 +46,5 @@ axios.get("http://localhost:4001/protected", {
 
 # UML Sequence Diagram
 
-![UML Diagram](./nodejs-loginservice/IMG_E7CFA750EFE8-1.jpeg)
+![UML Diagram](./IMG_E7CFA750EFE8-1.jpeg)
 
