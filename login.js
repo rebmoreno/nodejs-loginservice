@@ -1,6 +1,5 @@
 var express = require("express")
-require("dotenv").config()
-console.log("JWT_SECRET:", process.env.JWT_SECRET);
+require("dotenv").config() // This loads the .env file
 
 var app = express()
 app.use(express.json())
@@ -21,22 +20,16 @@ async function initializeUsers() {
     console.log("Users initialized:", users)
 }
 
+// Initialize users and start the server only after initialization is done
 initializeUsers().then((users) => {
-    // Start the server after users have been initialized
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
     })
 })
 
-app.get("/", (req, res) => {
-    res.send("Login microservice is up and running!")
-})
-
-
+// Login route
 app.post("/login", async (req, res) => {
     var {username, password} = req.body
-    console.log("Login attempt:", { username, password })
-
 
     if (!username || !password) {
         console.log("Username or password not provided");
@@ -46,21 +39,22 @@ app.post("/login", async (req, res) => {
     var user = users.find(u => u.username.trim() === username.trim())
 
     if (!user) {
-        console.log("User not found")
         return res.status(400).json({message:"User not found"})
     }
 
     var matches = await bcrypt.compare(password, user.password)
 
     if (!matches) {
-        console.log("Password mismatch")
-        return res.status(400).json({message: "Invalid credentials"})
+        return res.status(400).json({message: "Invalid password"})
     }
+
+    // Generate JWT token
     var token = jwt.sign({id: user.id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1h"})
 
     res.json({token})
 })
 
+// Authentication Middleware
 var authenticate = (req, res, next) => {
     var token = req.header("Authorization")?.split(" ")[1]
     console.log("Token received:", token)
@@ -80,6 +74,7 @@ var authenticate = (req, res, next) => {
     }
 }
 
+// Protected route example
 app.get("/protected", authenticate, (req, res) => {
     res.json({message: "This is a protected route.", user: req.user})
 })
